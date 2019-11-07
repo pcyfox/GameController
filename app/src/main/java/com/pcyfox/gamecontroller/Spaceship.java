@@ -37,9 +37,9 @@ public class Spaceship {
     // The ship is shaped as a single triangle, with a total width of 2 units along the x-axis
     // and a height of 1 unit along the y-axis.
     private static final float[] SHIP_SHAPE = {
-            -1.0f,  0.5f,
+            -1.0f, 0.5f,
             -1.0f, -0.5f,
-            1.0f,   0.0f
+            1.0f, 0.0f
     };
     // Scales the above vertices into world-space units.
     private static final float SHIP_SIZE = 5.0f;
@@ -180,26 +180,33 @@ public class Spaceship {
     public float getPositionX() {
         return mPositionX;
     }
+
     public void setPositionX(float positionX) {
         this.mPositionX = Utils.clamp(positionX, GameState.MAP_LEFT_COORDINATE,
                 GameState.MAP_RIGHT_COORDINATE);
     }
+
     public float getPositionY() {
         return mPositionY;
     }
+
     public void setPositionY(float positionY) {
         this.mPositionY = Utils.clamp(positionY, GameState.MAP_BOTTOM_COORDINATE,
                 GameState.MAP_TOP_COORDINATE);
     }
+
     public int getPlayerId() {
         return mPlayerId;
     }
+
     public boolean isActive() {
         return mController.isActive();
     }
+
     public int getScore() {
         return mScore;
     }
+
     public void changeScore(int pointDelta) {
         this.mScore = Math.max(0, mScore + pointDelta);
     }
@@ -320,12 +327,13 @@ public class Spaceship {
                 GamepadController.AXIS_X);
         mAimY = -mController.getJoystickPosition(GamepadController.JOYSTICK_2,
                 GamepadController.AXIS_Y);
+        //求出平面向量（x，y），模长 即：矢量长度
         float magnitude = Utils.vector2DLength(mAimX, mAimY);
 
         if (magnitude > JOYSTICK_MOVEMENT_THRESHOLD) {
             // Normalize the direction vector.
-            mAimX /= magnitude;
-            mAimY /= magnitude;
+            mAimX /= magnitude;//cos
+            mAimY /= magnitude;//sin
             mJoystickAiming = true;
         } else {
             // The firing joystick is not being used, so fire any shots in the direction
@@ -450,11 +458,12 @@ public class Spaceship {
 
     /**
      * Fires one or more bullets from the ship's current location.
+     *
      * @param bulletCount the number of bullets to fire.
-     * @param spreadArc for multiple bullets, the arc, in degrees, over which the bullets
-     *               are spread out.
-     * @param speed the speed of the bullets.
-     * @param recharge the number of frames delay before the next shot can be fired.
+     * @param spreadArc   for multiple bullets, the arc, in degrees, over which the bullets
+     *                    are spread out.
+     * @param speed       the speed of the bullets.
+     * @param recharge    the number of frames delay before the next shot can be fired.
      */
     protected void fireBullets(int bulletCount, float spreadArc, float speed,
                                float recharge) {
